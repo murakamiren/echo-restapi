@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 type User struct {
@@ -21,12 +22,17 @@ func getUsers(c echo.Context) error {
 
 func main() {
 	e := echo.New()
+
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello world")
 	})
 
 	e.GET("/users", getUsers)
 
+	// server running on port 1323
 	e.Logger.Fatal(e.Start(":1323"))
 
 }
